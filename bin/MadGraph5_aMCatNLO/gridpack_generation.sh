@@ -109,7 +109,7 @@ make_gridpack () {
     # CMS Connect runs git status inside its own script.
     if [ $iscmsconnect -eq 0 ]; then
       cd $PRODHOME
-      if [ -x "$(command -v git)" ]; then
+      if [ -n "$CAN_USE_GIT" ]; then
         git status
         echo "Current git revision is:"
         git rev-parse HEAD
@@ -433,7 +433,7 @@ make_gridpack () {
     #################################
     script_dir="${PRODHOME}/Utilities/scripts"
     if [ ! -d "$script_dir" ]; then
-      if ! [ -x "$(command -v git)" ]; then
+      if [ -z "$CAN_USE_GIT" ]; then
         script_dir=${PRODHOME%genproductions*}/genproductions/Utilities/scripts
       else
         script_dir=$(git rev-parse --show-toplevel)/Utilities/scripts
@@ -701,11 +701,17 @@ if [ -z "$PRODHOME" ]; then
   PRODHOME=`pwd`
 fi 
 
+# more generic git check
+CAN_USE_GIT=
+if [ -x "$(command -v git)" ] && git rev-parse --git-dir >& /dev/null; then
+   CAN_USE_GIT=true
+fi
+
 # Folder structure is different on CMSConnect
 helpers_dir=${PRODHOME%genproductions*}/genproductions/Utilities
 helpers_file=${helpers_dir}/gridpack_helpers.sh
 if [ ! -f "$helpers_file" ]; then
-  if ! [ -x "$(command -v git)" ]; then
+  if [ -z "$CAN_USE_GIT" ]; then
     helpers_dir=${PRODHOME}/Utilities
   else
     helpers_dir=$(git rev-parse --show-toplevel)/bin/MadGraph5_aMCatNLO/Utilities
