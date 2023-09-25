@@ -279,8 +279,9 @@ make_gridpack () {
         do
           #get needed BSM model
           if [[ $model = *[!\ ]* ]]; then
-            echo "Loading extra model $model"
-            wget --no-check-certificate https://cms-project-generators.web.cern.ch/cms-project-generators/$model	
+            echo "Loading extra model $model from $CARDSDIR"
+            cp $CARDSDIR/$model .
+            #wget --no-check-certificate https://cms-project-generators.web.cern.ch/cms-project-generators/$model	
             cd models
             if [[ $model == *".zip"* ]]; then
               unzip ../$model
@@ -576,7 +577,11 @@ make_gridpack () {
       echo "starting LO mode"
     
       echo "done" > makegrid.dat
-      echo "set gridpack True" >> makegrid.dat
+      if [ -n "$NO_GRIDPACK" ]; then
+        echo "set gridpack False" >> makegrid.dat
+      else
+        echo "set gridpack True" >> makegrid.dat
+      fi
       if [ -e $CARDSDIR/${name}_customizecards.dat ]; then
               cat $CARDSDIR/${name}_customizecards.dat | sed '/^$/d;/^#.*$/d' >> makegrid.dat
               echo "" >> makegrid.dat
