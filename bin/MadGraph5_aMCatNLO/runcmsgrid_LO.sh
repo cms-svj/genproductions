@@ -209,6 +209,8 @@ if [ -n "$DO_MG_SYSTEMATICS" ]; then
   popd
 fi
 
+# remove known unicode
+sed -i 's/\x7/a/g' ${LHEWORKDIR}/process/madevent/Events/${runlabel}/events.lhe
 # check lhe output  
 echo -e "\nRun xml check" 
 xmllint --stream --noout ${LHEWORKDIR}/process/madevent/Events/${runlabel}/events.lhe ; test $? -eq 0 || exit 1 
