@@ -213,7 +213,11 @@ make_gridpack () {
     
       LHAPDFINCLUDES=`$LHAPDFCONFIG --incdir`
       LHAPDFLIBS=`$LHAPDFCONFIG --libdir`
-    
+
+      # 'set auto_update 0' no longer sufficient to prevent update check
+      # possibly related to https://github.com/mg5amcnlo/mg5amcnlo/commit/7ddd7edbcf494545fb699f8bf8de881771fc2f31
+      # for now, just kill the relevant file
+      if [ -f input/.autoupdate ]; then rm -f input/.autoupdate; fi
       echo "set auto_update 0" > mgconfigscript
       echo "set automatic_html_opening False" >> mgconfigscript
       echo "set auto_convert_model True" >> mgconfigscript
