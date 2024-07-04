@@ -434,7 +434,7 @@ make_gridpack () {
     script_dir="${PRODHOME}/Utilities/scripts"
     if [ ! -d "$script_dir" ]; then
       if [ -z "$CAN_USE_GIT" ]; then
-        script_dir=${PRODHOME%genproductions*}/genproductions/Utilities/scripts
+        script_dir=${PRODHOME}/../../Utilities/scripts
       else
         script_dir=$(git rev-parse --show-toplevel)/Utilities/scripts
       fi
