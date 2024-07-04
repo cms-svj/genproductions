@@ -618,7 +618,9 @@ make_gridpack () {
       pdfExtraArgs+="--is5FlavorScheme "
     fi 
     
-    pdfSysArgs=$(python ${script_dir}/getMG5_aMC_PDFInputs.py -f systematics -c 2017 $pdfExtraArgs)
+    if [ -z "$pdfSysArgs" ]; then
+        pdfSysArgs=$(python ${script_dir}/getMG5_aMC_PDFInputs.py -f systematics -c 2017 $pdfExtraArgs)
+    fi
     sed -i s/PDF_SETS_REPLACE/${pdfSysArgs}/g runcmsgrid.sh
     
     
