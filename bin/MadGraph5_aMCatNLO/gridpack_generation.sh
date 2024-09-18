@@ -475,7 +475,7 @@ make_gridpack () {
     script_dir="${PRODHOME}/Utilities/scripts"
     if [ ! -d "$script_dir" ]; then
       if ! [ -z "$CAN_USE_GIT" ]; then
-        script_dir=${PRODHOME%genproductions*}/genproductions/Utilities/scripts
+        script_dir=script_dir=${PRODHOME}/../../Utilities/scripts
       else
         script_dir=$(git rev-parse --show-toplevel)/Utilities/scripts
       fi
@@ -663,7 +663,9 @@ make_gridpack () {
       pdfExtraArgs+="--is5FlavorScheme "
     fi 
     
-    pdfSysArgs=$(python3 ${script_dir}/getMG5_aMC_PDFInputs.py -f systematics -c run3 $pdfExtraArgs)
+    if [ -z "$pdfSysArgs" ]; then
+        pdfSysArgs=$(python3 ${script_dir}/getMG5_aMC_PDFInputs.py -f systematics -c run3 $pdfExtraArgs)
+    fi
     sed -i s/PDF_SETS_REPLACE/${pdfSysArgs}/g runcmsgrid.sh
     
     
